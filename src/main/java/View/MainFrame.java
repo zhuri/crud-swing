@@ -13,6 +13,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -21,6 +23,8 @@ import javax.swing.event.ListSelectionListener;
  * @author jaywalker
  */
 public class MainFrame extends javax.swing.JFrame {
+    
+    ArrayList<Product> products;
 
     /**
      * Creates new form MainFrame
@@ -28,8 +32,10 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() throws Exception {
         initComponents();      
         this.openProductFrame();
+        products = new ArrayList<Product>();
         this.loadDataOnList(new ProductService());
         this.getSelectedItem();
+        this.filterList();
     }
 
     /**
@@ -44,6 +50,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         lstProducts = new javax.swing.JList<>();
         btnCreateProduct = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,6 +63,12 @@ public class MainFrame extends javax.swing.JFrame {
 
         btnCreateProduct.setText("Add Product");
 
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -64,7 +77,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCreateProduct)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -72,13 +86,19 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnCreateProduct)
-                .addGap(75, 75, 75)
+                .addGap(41, 41, 41)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
 
     public void openProductFrame() {
         this.btnCreateProduct.addActionListener(new ActionListener() {
@@ -91,8 +111,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
     
     public void loadDataOnList(ProductService productService) throws Exception {
-        DefaultListModel listModel = new DefaultListModel();
-        ArrayList<Product> products = new ArrayList<Product>();
+        DefaultListModel listModel = new DefaultListModel();        
         products = productService.list();
         for (Product p : products) {
             listModel.addElement(p);
@@ -100,37 +119,68 @@ public class MainFrame extends javax.swing.JFrame {
         lstProducts.setModel(listModel);
     }
     
-    public void getSelectedItem() {      
-//        lstProducts.addMouseListener(new MouseAdapter() {
-//            @Override 
-//            public void mouseClicked(MouseEvent e) {
-//                
-////                Product p = (Product) lstProducts.getSelectedValue();
-//                System.out.println("clicked: " + lstProducts.getSelectedValue());
-//            }
-//        });
+    public void getSelectedItem() {
         lstProducts.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent arg0) {
                 if (!arg0.getValueIsAdjusting()) {
                     try {
                         int index = lstProducts.getSelectedIndex();
-                        System.out.println(lstProducts.getModel().getElementAt(index));
+                        System.out.println(products.get(index));
                     } catch(Exception e) {
-                        System.out.println("blla");
+                        System.out.println("blla: " + e);
                     }
-//                    String p = String.valueOf(lstProducts.getModel().getElementAt(arg0.getLastIndex()));
-//                    System.out.println(p);
-//                  System.out.println(lstProducts.getSelectedValue().toString());
                 }
-//                String p = lstProducts.getModel().getElementAt(arg0.getLastIndex());
             }
         });
+    }
+    
+    public void filterList() {
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent arg0) {
+                search(txtSearch.getText());
+                System.out.println("insertUpdate: " + txtSearch.getText());
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent arg0) {
+                search(txtSearch.getText());
+                System.out.println("removeUpdate: " + txtSearch.getText());
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent arg0) {
+                System.out.println("changing: " + txtSearch.getText());
+            }
+        });
+    }
+    
+    private void search(String input) {
+        ArrayList<Product> filtered = products;
+        for (Product p : products) {
+            if (p.getName().toLowerCase().startsWith(input) || p.getDescription().toLowerCase().startsWith(input)) {
+                filtered.add(p);
+            }
+        }
+        this.refreshDataOnList(filtered);
+        //return filtered;
+    }    
+    
+    private void refreshDataOnList(ArrayList<Product> data) {
+        DefaultListModel listModel = new DefaultListModel();                
+        for (Product p : data) {
+            listModel.addElement(p);
+        }
+        lstProducts.setModel(listModel);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateProduct;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> lstProducts;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
