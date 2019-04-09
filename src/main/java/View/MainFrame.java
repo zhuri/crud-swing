@@ -25,6 +25,7 @@ import javax.swing.event.ListSelectionListener;
 public class MainFrame extends javax.swing.JFrame {
     
     ArrayList<Product> products;
+    DefaultListModel listModel;
 
     /**
      * Creates new form MainFrame
@@ -111,7 +112,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
     
     public void loadDataOnList(ProductService productService) throws Exception {
-        DefaultListModel listModel = new DefaultListModel();        
+        listModel = new DefaultListModel();        
         products = productService.list();
         for (Product p : products) {
             listModel.addElement(p);
@@ -160,21 +161,27 @@ public class MainFrame extends javax.swing.JFrame {
     
     private void search(String input) {
         ArrayList<Product> filtered = products;
-        for (Product p : products) {
-            if (p.getName().toLowerCase().startsWith(input) || p.getDescription().toLowerCase().startsWith(input)) {
-                filtered.add(p);
+        if (input.isEmpty())
+            return;
+        for (int i = 0; i < products.size(); i++) { 
+            if (products.get(i).getName().toLowerCase().startsWith(input.toLowerCase())) {
+                filtered.add(products.get(i));
             }
+//            if (products.get(i).getName().toLowerCase().startsWith(input) || products.get(i).getDescription().toLowerCase().startsWith(input)) {
+//                
+//                System.out.println(products.get(i));
+//            }
         }
+        
         this.refreshDataOnList(filtered);
         //return filtered;
     }    
     
-    private void refreshDataOnList(ArrayList<Product> data) {
-        DefaultListModel listModel = new DefaultListModel();                
-        for (Product p : data) {
-            listModel.addElement(p);
+    private void refreshDataOnList(ArrayList<Product> data) {                      
+        for (int i = 0; i < data.size(); i++) {
+            listModel.addElement(data.get(i));
         }
-        lstProducts.setModel(listModel);
+        //lstProducts.setModel(listModel);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
