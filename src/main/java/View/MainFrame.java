@@ -165,15 +165,27 @@ public class MainFrame extends javax.swing.JFrame {
             return;
         for (int i = 0; i < products.size(); i++) { 
             if (products.get(i).getName().toLowerCase().startsWith(input.toLowerCase())) {
-                filtered.add(products.get(i));
+//                filtered.add(products.get(i));
+                listModel.addElement(products.get(i));
+            } else {
+                listModel.removeElement(products.get(i));
             }
+//            if (!s.startsWith(filter)) {
+//            if (model.contains(s)) {
+//                model.removeElement(s);
+//            }
+//        } else {
+//            if (!model.contains(s)) {
+//                model.addElement(s);
+//            }
+//        }
 //            if (products.get(i).getName().toLowerCase().startsWith(input) || products.get(i).getDescription().toLowerCase().startsWith(input)) {
 //                
 //                System.out.println(products.get(i));
 //            }
         }
         
-        this.refreshDataOnList(filtered);
+//        this.refreshDataOnList(filtered);
         //return filtered;
     }    
     
