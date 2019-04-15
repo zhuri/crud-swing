@@ -57,8 +57,37 @@ public class ProductService {
         return products;
     }
     
-    public void update(Product p) {
+    public Product list(Product p) throws SQLException, Exception {
+        int pId = p.getId();
+        String query = "select * from product where id = " + pId + ";";
+        Connection c = this.conn.getConnection();
         
+        Statement st = c.createStatement();
+        ResultSet rs = st.executeQuery(query);
+        
+        Product product = null;
+        while(rs.next()) {
+            int id = rs.getInt("id");
+            String description = rs.getString("description");
+            String name = rs.getString("name");
+            int qty = rs.getInt("qty");
+            
+            product = new Product(id, name, description, qty);
+        }
+        this.conn.closeConnection();
+        return product;
+    }
+    
+    public void update(Product p) throws SQLException {
+        String query = "update product set name = ?, description = ?, qty = ? where id = ?;";
+        Connection c = this.conn.getConnection();
+        PreparedStatement prepSt = c.prepareStatement(query);
+        prepSt.setString(1, p.getName());
+        prepSt.setString(2, p.getDescription());
+        prepSt.setInt(3, p.getQty());
+        prepSt.setInt(4, p.getId());
+        
+        prepSt.execute();
     }
     
     public void delete(Product p) {

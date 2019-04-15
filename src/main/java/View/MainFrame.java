@@ -129,6 +129,7 @@ public class MainFrame extends javax.swing.JFrame {
                 if (!arg0.getValueIsAdjusting()) {
                     try {
                         int index = lstProducts.getSelectedIndex();
+                        new UpdateProductFrame(products.get(index), new ProductService()).setVisible(true);
                         System.out.println(products.get(index));
                     } catch(Exception e) {
                         System.out.println("blla: " + e);
