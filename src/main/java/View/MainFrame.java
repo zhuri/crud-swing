@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -140,16 +142,23 @@ public class MainFrame extends javax.swing.JFrame {
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent arg0) {
-                search(txtSearch.getText());
-                System.out.println("insertUpdate: " + txtSearch.getText());
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                try {
+                    search(txtSearch.getText());
+                } catch (Exception ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                System.out.println("insertUpdate: " + txtSearch.getText());                
             }
 
             @Override
             public void removeUpdate(DocumentEvent arg0) {
-                search(txtSearch.getText());
+                try {
+                    search(txtSearch.getText());
+                } catch (Exception ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 System.out.println("removeUpdate: " + txtSearch.getText());
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                
             }
 
             @Override
@@ -159,41 +168,25 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     
-    private void search(String input) {
+    private void search(String input) throws Exception {
         ArrayList<Product> filtered = products;
-        if (input.isEmpty())
+        if (input.isEmpty()) {
+            loadDataOnList(new ProductService());
             return;
+        }          
         for (int i = 0; i < products.size(); i++) { 
-            if (products.get(i).getName().toLowerCase().startsWith(input.toLowerCase())) {
-//                filtered.add(products.get(i));
+            if (products.get(i).getName().toLowerCase().equals(input.toLowerCase())) {
                 listModel.addElement(products.get(i));
             } else {
-                listModel.removeElement(products.get(i));
+                listModel.removeElement(products.get(i));                
             }
-//            if (!s.startsWith(filter)) {
-//            if (model.contains(s)) {
-//                model.removeElement(s);
-//            }
-//        } else {
-//            if (!model.contains(s)) {
-//                model.addElement(s);
-//            }
-//        }
-//            if (products.get(i).getName().toLowerCase().startsWith(input) || products.get(i).getDescription().toLowerCase().startsWith(input)) {
-//                
-//                System.out.println(products.get(i));
-//            }
         }
-        
-//        this.refreshDataOnList(filtered);
-        //return filtered;
     }    
     
     private void refreshDataOnList(ArrayList<Product> data) {                      
         for (int i = 0; i < data.size(); i++) {
             listModel.addElement(data.get(i));
         }
-        //lstProducts.setModel(listModel);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
