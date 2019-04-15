@@ -7,6 +7,7 @@ package Service;
 
 import Data.DBConnection;
 import Model.Product;
+import Model.UpdatedBy;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,7 +39,8 @@ public class ProductService {
     }
     
     public ArrayList<Product> list() throws SQLException, Exception {
-        String query = "select * from product;";
+        String query = "SELECT p.*, ub.id as ub_id, ub.name as ub_name FROM catalog.product as p left join updatedBy as ub\n" +
+"on p.updatedBy_id = ub.id;;";
         Connection c = this.conn.getConnection();
         
         Statement st = c.createStatement();
@@ -50,8 +52,12 @@ public class ProductService {
             String description = rs.getString("description");
             String name = rs.getString("name");
             int qty = rs.getInt("qty");
+            int updatedById = rs.getInt("ub_id");
+            String ubName = rs.getString("ub_name");
             
-            products.add(new Product(id, name, description, qty));
+            Product prod = new Product(id, name, description, qty);
+            prod.setUpdatedBy(new UpdatedBy(updatedById, ubName));
+            products.add(prod);
         }
         this.conn.closeConnection();
         return products;
@@ -79,13 +85,14 @@ public class ProductService {
     }
     
     public void update(Product p) throws SQLException {
-        String query = "update product set name = ?, description = ?, qty = ? where id = ?;";
+        String query = "update product set name = ?, description = ?, updatedBy_id = ?, qty = ? where id = ?;";
         Connection c = this.conn.getConnection();
         PreparedStatement prepSt = c.prepareStatement(query);
         prepSt.setString(1, p.getName());
         prepSt.setString(2, p.getDescription());
-        prepSt.setInt(3, p.getQty());
-        prepSt.setInt(4, p.getId());
+        prepSt.setInt(3, p.getUpdatedBy());
+        prepSt.setInt(4, p.getQty());
+        prepSt.setInt(5, p.getId());
         
         prepSt.execute();
     }

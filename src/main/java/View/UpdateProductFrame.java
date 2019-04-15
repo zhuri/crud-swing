@@ -6,7 +6,9 @@
 package View;
 
 import Model.Product;
+import Model.UpdatedBy;
 import Service.ProductService;
+import Service.UpdatedByService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,6 +20,7 @@ public class UpdateProductFrame extends javax.swing.JFrame {
     
     ProductService productService;
     Product product;
+    UpdatedByService updatedByService;
 
     /**
      * Creates new form UpdateProductFrame
@@ -25,10 +28,11 @@ public class UpdateProductFrame extends javax.swing.JFrame {
      * @param productService
      */
     public UpdateProductFrame(Product p, ProductService productService) {
-        initComponents();
+        initComponents();        
         this.product = p;
         this.initFields(p);
         this.productService = productService;
+        this.updatedByService = new UpdatedByService();
         updateProduct();
     }
 
@@ -48,6 +52,11 @@ public class UpdateProductFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        txtUpdatedByName = new javax.swing.JTextField();
+        txtUpdatedById = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,23 +80,39 @@ public class UpdateProductFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Updated by");
+
+        jLabel4.setText("Id");
+
+        jLabel5.setText("Name");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblName)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblName)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnUpdateProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtDescription)
+                            .addComponent(txtName)
+                            .addComponent(txtQty))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addComponent(jLabel5))
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnUpdateProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtDescription)
-                    .addComponent(txtName)
-                    .addComponent(txtQty))
-                .addGap(0, 263, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(txtUpdatedByName, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                    .addComponent(txtUpdatedById))
+                .addGap(0, 41, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,18 +120,25 @@ public class UpdateProductFrame extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblName))
-                .addGap(18, 18, 18)
+                    .addComponent(lblName)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUpdatedById, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(txtUpdatedByName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtQty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addComponent(btnUpdateProduct)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         pack();
@@ -123,18 +155,25 @@ public class UpdateProductFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnUpdateProduct;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel lblName;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtQty;
+    private javax.swing.JTextField txtUpdatedById;
+    private javax.swing.JTextField txtUpdatedByName;
     // End of variables declaration//GEN-END:variables
 
     private void initFields(Product p) {
         txtName.setText(p.getName());
         txtDescription.setText(p.getDescription());
         txtQty.setText(Integer.toString(p.getQty()));
+        txtUpdatedById.setText(Integer.toString(p.getUpdatedBy()));
+        txtUpdatedByName.setText(p.getUpdatedByName());
     }
 
     private void updateProduct() {
@@ -142,7 +181,12 @@ public class UpdateProductFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 try {
-                    productService.update(new Product(product.getId(), txtName.getText(), txtDescription.getText(), Integer.parseInt(txtQty.getText())));                   
+                    Product p = new Product(product.getId(), txtName.getText(), txtDescription.getText(), Integer.parseInt(txtQty.getText()));
+                    UpdatedBy ub = new UpdatedBy(txtUpdatedByName.getText());
+                    updatedByService.create(ub);
+                    UpdatedBy saved = updatedByService.list(ub);
+                    p.setUpdatedBy(saved);
+                    productService.update(p);                   
                 } catch (Exception e) {
                     System.out.println("Could not update product: " + e.getMessage());
                 } finally {

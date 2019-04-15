@@ -14,6 +14,7 @@ public class Product {
     private String name;
     private String description;
     private int qty;
+    private UpdatedBy updatedBy;
     
     public Product(){}
     
@@ -22,6 +23,18 @@ public class Product {
         this.name = name;
         this.description = description;
         this.qty = qty;
+    }    
+    
+    public void setUpdatedBy(UpdatedBy updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public int getUpdatedBy() {
+        return this.updatedBy.getId();
+    }
+    
+    public String getUpdatedByName() {
+        return this.updatedBy.getName();
     }
     
     public int getId() {
