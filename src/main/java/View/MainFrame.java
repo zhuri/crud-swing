@@ -39,6 +39,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.loadDataOnList(new ProductService());
         this.getSelectedItem();
         this.filterList();
+        this.addOrder();
     }
 
     /**
@@ -54,6 +55,8 @@ public class MainFrame extends javax.swing.JFrame {
         lstProducts = new javax.swing.JList<>();
         btnCreateProduct = new javax.swing.JButton();
         txtSearch = new javax.swing.JTextField();
+        btnAddOrder = new javax.swing.JButton();
+        btnListOrders = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,6 +75,15 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        btnAddOrder.setText("Add Order");
+        btnAddOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddOrderActionPerformed(evt);
+            }
+        });
+
+        btnListOrders.setText("Orders");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,16 +91,24 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCreateProduct)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnCreateProduct)
+                        .addGap(28, 28, 28)
+                        .addComponent(btnAddOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnListOrders, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnCreateProduct)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCreateProduct)
+                    .addComponent(btnAddOrder)
+                    .addComponent(btnListOrders))
                 .addGap(41, 41, 41)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -102,6 +122,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void btnAddOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddOrderActionPerformed
 
     public void openProductFrame() {
         this.btnCreateProduct.addActionListener(new ActionListener() {
@@ -189,9 +213,33 @@ public class MainFrame extends javax.swing.JFrame {
             listModel.addElement(data.get(i));
         }
     }
+    
+    public void addOrder() {
+        btnAddOrder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                try {
+                    new AddOrderFrame().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+    
+    public void listOrders() {
+        btnListOrders.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                new ListOrdersFrame().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddOrder;
     private javax.swing.JButton btnCreateProduct;
+    private javax.swing.JButton btnListOrders;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> lstProducts;
     private javax.swing.JTextField txtSearch;

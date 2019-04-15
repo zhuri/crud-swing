@@ -14,11 +14,29 @@ import java.util.Date;
  */
 public class Order {
     private int id;
+    private String name;
     private ArrayList<Product> products;
     private Date date;
+    private int productId;
     
     public Order() {
         this.products = new ArrayList<Product>();
+    }
+    
+    public void setProductId(int id) {
+        this.productId = id;
+    }
+    
+    public int getProductId() {
+        return this.productId;
+    }
+    
+    public String getName() {
+        return this.name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {
